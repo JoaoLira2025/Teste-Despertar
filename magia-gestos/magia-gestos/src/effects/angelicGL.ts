@@ -3,7 +3,7 @@ import type { Hand } from "../tracking/handTracker";
 import { handScale } from "../gestures/gestures";
 
 const ORB_UV = 0.3; // raio do orbe dentro do quadrado do shader (0..1); o resto é aura/raios
-const GAIN = 1.0;   // intensidade geral do brilho (desça se estiver estourando no bloom)
+const GAIN = 0.5;   // intensidade geral do brilho (desça se estiver estourando no bloom)
 
 const plane = new THREE.PlaneGeometry(2, 2);
 
@@ -251,7 +251,7 @@ export class AngelicGL {
       // O orbe fica entre as pontas do polegar e do indicador
       const tx = ((hand[4].x + hand[8].x) / 2) * w;
       const ty = ((hand[4].y + hand[8].y) / 2) * h;
-      const tr = handScale(hand, aspect) * h * 0.35;
+      const tr = handScale(hand, aspect) * h * 0.20;
       if (this.level === 0) {
         this.cx = tx; this.cy = ty; this.r = tr;
       } else {
@@ -334,7 +334,7 @@ export class SuperAngelicGL {
       const ty = (ay + by) / 2;
       const dist = Math.hypot(ax - bx, ay - by);
       const base = (handScale(handA, aspect) + handScale(handB, aspect)) / 2;
-      const tr = Math.max(dist * 0.45, base * h * 1.0);
+      const tr = Math.max(dist * 0.45, base * h * 0.70);
 
       if (this.level === 0) {
         this.cx = tx; this.cy = ty; this.r = tr;
