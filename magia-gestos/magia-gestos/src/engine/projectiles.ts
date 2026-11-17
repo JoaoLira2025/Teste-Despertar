@@ -9,7 +9,7 @@ import { BoltBeam } from "../effects/boltBeam";
 import { fakeHand } from "../effects/fakeHand";
 
 // ---- Ajustes (velocidades em px/s, para um vídeo de 1280 px; escalam sozinhas com a largura real) ----
-const THROW_SPEED = 550;      // velocidade da mão para contar como arremesso
+const THROW_SPEED = 700;      // velocidade da mão para contar como arremesso
 const MAX_HAND_SPEED = 9000;   // acima disso é falha do rastreamento, não um arremesso
 const MIN_SPEED = 900;         // velocidade mínima do projétil
 const MAX_SPEED = 2200;        // velocidade máxima do projétil
