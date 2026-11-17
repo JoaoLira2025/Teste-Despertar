@@ -326,10 +326,10 @@ export class GeodesicGlobeGL {
     // Aura (esfera ocupa 62% do quadrado) e brilho no chão, abaixo do globo
     const auraHalf = R / GLOW_R;
     this.aura.scale.set(auraHalf, auraHalf, 1);
-    this.ground.position.set(0, R * 1.1, 0);
-    this.ground.scale.set(R * 1.5, R * 0.26, 1);
+    //this.ground.position.set(0, R * 1.1, 0);
+   // this.ground.scale.set(R * 1.5, R * 0.26, 1);
     this.auraMat.uniforms.uLevel.value = L;
-    this.groundMat.uniforms.uLevel.value = L * 0.8;
+   // this.groundMat.uniforms.uLevel.value = L * 0.8;
 
     this.lineGlow.opacity = L * 0.3;
     this.lineCore.opacity = L * (0.85 + 0.15 * Math.sin(now / 400));
