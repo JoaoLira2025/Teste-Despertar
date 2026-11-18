@@ -14,9 +14,9 @@ const MAX_HAND_SPEED = 9000;   // acima disso é falha do rastreamento, não um 
 const MIN_SPEED = 900;         // velocidade mínima do projétil
 const MAX_SPEED = 2200;        // velocidade máxima do projétil
 const DRAG = 0.992;            // freio por ~16 ms (1.0 = não desacelera)
-const LIFE_MS = 2500;          // tempo máximo de voo
+const LIFE_MS = 1500;          // tempo máximo de voo
 const FADE_MS = 1300;          // tempo de "apagar" antes de liberar o projétil para reuso
-const LOCK_MS = 700;           // tempo que o efeito some da mão depois do arremesso
+const LOCK_MS = 400;           // tempo que o efeito some da mão depois do arremesso
 const POOL = 2;                // projéteis simultâneos de cada tipo
 const MARGIN = 150;            // folga fora da tela antes de o projétil apagar
 const REFERENCE_WIDTH = 1280;  // largura de referência das velocidades acima
