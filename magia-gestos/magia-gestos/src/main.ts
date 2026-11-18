@@ -12,6 +12,7 @@ import { StormGL } from "./effects/stormGL";
 import { TeslaShieldGL } from "./effects/teslaShieldGL";
 import { JudgementGlobeGL } from "./effects/judgementGlobeGL";
 import { ProjectileSystem } from "./engine/projectiles";
+import { WaterBubbleGL } from "./effects/waterBubbleGL"; // <-- NOVO IMPORT
 
 const video = document.getElementById("video") as HTMLVideoElement;
 const canvas = document.getElementById("overlay") as HTMLCanvasElement;
@@ -35,7 +36,8 @@ const GESTURE_COLOR: Record<GestureName, string> = {
   pinch: "#ffd93d",
   fist: "#ff5d73",
   spark: "#7aa2ff",
-  three: "#ffb347", // <-- Nova cor para o gesto "Globo"
+  three: "#ffb347",
+  one: "#00ffff", // <-- Cor para o novo gesto
 };
 
 const GESTURE_LABEL: Record<GestureName, string> = {
@@ -44,7 +46,8 @@ const GESTURE_LABEL: Record<GestureName, string> = {
   pinch: "Pinça",
   fist: "Punho",
   spark: "Raio",
-  three: "Globo", // <-- Nova label
+  three: "Globo",
+  one: "Bolha d'água", // <-- Label para o novo gesto
 };
 
 function drawHand(hand: Hand, gesture: GestureName): void {
@@ -138,6 +141,12 @@ async function start(): Promise<void> {
     new GeodesicGlobeGL(stage.scene, canvas.width, canvas.height),
   ];
 
+  // Bolha d'água (indicador apenas)
+  const waterBubbles = [
+    new WaterBubbleGL(stage.scene),
+    new WaterBubbleGL(stage.scene)
+  ];
+
   // Lançamento de feitiços (arremessar a mão)
   const projectiles = new ProjectileSystem(stage.scene, canvas.width, canvas.height, aspect);
 
@@ -224,7 +233,7 @@ async function start(): Promise<void> {
 
         const cShield = shields[teslaPalmIdx].getCenter();
         const sh = hands[teslaSparkIdx];
-        const mx = ((sh[4].x + sh[8].x) / 2) * w; // meio entre polegar e indicador
+        const mx = ((sh[4].x + sh[8].x) / 2) * w;
         const my = ((sh[4].y + sh[8].y) / 2) * h;
         const dist = Math.hypot(cShield.x - mx, cShield.y - my);
 
@@ -251,7 +260,7 @@ async function start(): Promise<void> {
 
         const cAngel = angels[jPinchIdx].getCenter();
         const sh = hands[jSparkIdx];
-        const mx = ((sh[4].x + sh[8].x) / 2) * w; // meio entre polegar e indicador do "L"
+        const mx = ((sh[4].x + sh[8].x) / 2) * w;
         const my = ((sh[4].y + sh[8].y) / 2) * h;
         const dist = Math.hypot(cAngel.x - mx, cAngel.y - my);
 
@@ -266,23 +275,23 @@ async function start(): Promise<void> {
     // 4. Atualiza os efeitos individuais
     hands.forEach((hand, i) => {
       const gesture = gestures[i];
-      const locked = projectiles.isLocked(i, now); // acabou de lançar: efeito da mão apagado
+      const locked = projectiles.isLocked(i, now);
 
-      // Quando há uma fusão ou lançamento, os efeitos individuais envolvidos somem
       const showIndividualShield = gesture === "openPalm" && !near && !divineFusion && !teslaFusion && !locked;
       const showIndividualAngel = gesture === "pinch" && !nearAngel && !divineFusion && !judgementFusion && !locked;
 
       shields[i].update(hand, showIndividualShield, now, aspect, w, h);
 
-      // O raio some se a tempestade, o escudo Tesla, o Globo do Julgamento estiverem ativos ou se estiver lançando
       lightnings[i].update(hand, gesture === "spark" && !bothSpark && !teslaFusion && !judgementFusion && !locked, w, h);
 
       fireGLs[i].update(hand, gesture === "fist" && !locked, aspect, w, h);
 
       angels[i].update(hand, showIndividualAngel, now, aspect, w, h);
 
-      // Globo Geodésico (o gesto "three" deve ser adicionado no gestures.ts)
       globes[i].update(hand, gesture === "three" && !locked, now, aspect, w, h);
+
+      // NOVO: Atualiza a bolha d'água (ela fica na mão e some se a mão for "travada" pelo lançamento)
+      waterBubbles[i].update(hand, gesture === "one" && !locked, now, aspect, w, h);
     });
 
     // 5. Super escudo
@@ -326,6 +335,7 @@ async function start(): Promise<void> {
       angels[i].update(null, false, now, aspect, w, h);
       lightnings[i].update(null, false, w, h);
       globes[i].update(null, false, now, aspect, w, h);
+      waterBubbles[i].update(null, false, now, aspect, w, h); // <-- Adicionado no fade out
     }
 
     // 7. Renderiza a cena Three.js (com bloom)

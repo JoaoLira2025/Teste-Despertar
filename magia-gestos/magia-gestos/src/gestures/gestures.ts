@@ -1,6 +1,6 @@
 import type { Hand } from "../tracking/handTracker";
 
-export type GestureName = "none" | "openPalm" | "pinch" | "fist" | "spark" | "three";
+export type GestureName = "none" | "openPalm" | "pinch" | "fist" | "spark" | "three" | "one";
 type Point = { x: number; y: number };
 
 // Índices dos landmarks do MediaPipe
@@ -56,6 +56,12 @@ export function classifyHand(hand: Hand, aspect: number): GestureName {
   if (ext[0] && ext[1] && !ext[2] && !ext[3] && isThumbExtended(hand, aspect)) return "three";
   if (ext[0] && !ext[1] && !ext[2] && !ext[3] && isThumbExtended(hand, aspect)) return "spark";
   if (extended === 0) return "fist";
+  if (ext[0] && !ext[1] && !ext[2] && !ext[3]) {
+    // Além de esticado, verificamos se o dedão está perto da palma (para não ser o "L")
+    const thumbTight = dist(hand[WRIST], hand[THUMB_TIP], aspect) / handScale(hand, aspect) < 1.5;
+    if (thumbTight) return "one";
+  }
+  
   return "none";
 }
 
