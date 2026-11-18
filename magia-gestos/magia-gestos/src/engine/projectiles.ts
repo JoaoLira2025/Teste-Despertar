@@ -18,7 +18,7 @@ const LIFE_MS = 1500;          // tempo máximo de voo
 const FADE_MS = 1300;          // tempo de "apagar" antes de liberar o projétil para reuso
 const LOCK_MS = 400;           // tempo que o efeito some da mão depois do arremesso
 const POOL = 2;                // projéteis simultâneos de cada tipo
-const MARGIN = 150;            // folga fora da tela antes de o projétil apagar
+const MARGIN = 50;            // folga fora da tela antes de o projétil apagar
 const REFERENCE_WIDTH = 1280;  // largura de referência das velocidades acima
 
 type Kind = "fire" | "orb" | "globe" | "shield" | "bolt";
